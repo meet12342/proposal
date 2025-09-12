@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Question For You...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            color: #333;
+            overflow: hidden;
+        }
+        h1, h2, h3 {
+            font-family: 'Lobster', cursive;
+        }
+        .theme-container {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+        .theme-btn {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s ease-in-out;
+            color: white;
+            font-weight: bold;
+        }
+        .theme-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        .theme-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .hidden {
+            display: none;
+        }
+        .page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease-in-out;
+            padding: 1rem;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        .theme-image {
+             border-radius: 16px;
+             border: 4px solid white;
+             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .text-shadow-dreamy {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 0 15px rgba(236, 72, 153, 0.5);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <!-- Page 1: Intro -->
+    <div id="page1" class="page">
+        <div class="theme-container p-8 md:p-12 text-center">
+            <h1 class="text-4xl md:text-6xl mb-6 text-shadow-dreamy">Hey senior</h1>
+            <button onclick="showPage('page2')" class="theme-btn bg-sky-400 text-2xl px-8 py-3">Next ➤</button>
+        </div>
+    </div>
+
+    <!-- Page 2: Buildup -->
+    <div id="page2" class="page hidden">
+        <div class="theme-container p-8 md:p-12 text-center">
+            <h1 class="text-3xl md:text-5xl mb-6 text-shadow-dreamy">To pop the freshers question...</h1>
+            <button onclick="showPage('page3')" class="theme-btn bg-pink-400 text-2xl px-8 py-3">...?</button>
+        </div>
+    </div>
+
+    <!-- Page 3: The Ask -->
+    <div id="page3" class="page hidden">
+        <div class="theme-container p-8 md:p-12 text-center w-11/12 max-w-lg">
+            <h1 id="ask-title" class="text-3xl md:text-5xl mb-4 text-shadow-dreamy">Will you be my date for Fresher’s Night? 💃🪩</h1>
+            <img id="ask-image" src="513828403_705941548992060_6725769523721769154_n.jpg" alt="Asking image" class="theme-image mx-auto my-6 w-48 h-48 object-cover">
+            <div class="flex justify-center gap-6 mt-6">
+                <button id="yes-button" onclick="handleYes()" class="theme-btn bg-emerald-400 text-2xl px-8 py-3">Yes</button>
+                <button id="no-button" onclick="handleNo()" class="theme-btn bg-red-400 text-2xl px-8 py-3">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: Yes Sequence -->
+    <div id="page4" class="page hidden">
+        <div class="theme-container p-8 md:p-12 text-center w-11/12 max-w-lg">
+            <h1 id="yes-title" class="text-3xl md:text-5xl mb-4 text-shadow-dreamy"></h1>
+            <img id="yes-image" src="" alt="Happy gif" class="theme-image mx-auto my-6 w-64 h-64 object-cover">
+        </div>
+    </div>
+
+
+    <script>
+        let currentPage = 'page1';
+        let noClickCount = 0;
+        let yesClickCount = 0;
+
+        const noResponses = [
+            { text: "LOL stop lying.", img: "542000649_2258807734564743_8533127351170187170_n.jpg" },
+            { text: "don’t play with me rn 😭", img: "515159940_1408239493793831_4606587276590576322_n.jpg" },
+            { text: "You fr chose violence today??", img: "491104961_1050085287027234_238134717997185456_n.jpg" },
+            { text: "This isn’t UNO, you can’t just skip me 💔", img: "515159940_1408239493793831_4606587276590576322_n.jpg" },
+            { text: "Ok but deep down we both know it’s a YES 💅", img: "494361552_679548898056086_7940789146285326485_n.jpg" }
+        ];
+
+        const yesResponses = [
+            { text: "Knew it. I’m psychic 🧿😌", img: "494361552_679548898056086_7940789146285326485_n.jpg" },
+            { text: "Okay but now… is someone knocking at your door? 👀🚪", img: "513828403_705941548992060_6725769523721769154_n.jpg" },
+            { text: "You better answer it… might be your date 😉", img: "513828403_705941548992060_6725769523721769154_n.jpg" }
+        ];
+
+        function showPage(pageId) {
+            const currentPageElement = document.getElementById(currentPage);
+            const newPageElement = document.getElementById(pageId);
+
+            if (currentPageElement && newPageElement) {
+                 currentPageElement.classList.add('fade-out');
+                 setTimeout(() => {
+                    currentPageElement.classList.add('hidden');
+                    currentPageElement.classList.remove('fade-out');
+                    
+                    newPageElement.classList.remove('hidden');
+                    currentPage = pageId;
+                }, 500);
+            }
+        }
+
+        function handleNo() {
+            if (noClickCount < noResponses.length) {
+                const response = noResponses[noClickCount];
+                document.getElementById('ask-title').textContent = response.text;
+                document.getElementById('ask-image').src = response.img;
+                noClickCount++;
+
+                const yesButton = document.getElementById('yes-button');
+                const currentSize = 1 + (noClickCount * 0.2);
+                yesButton.style.transform = `scale(${currentSize})`;
+            }
+             if (noClickCount === noResponses.length) {
+                document.getElementById('no-button').classList.add('hidden');
+            }
+        }
+
+        function handleYes() {
+            showPage('page4');
+            updateYesSequence();
+        }
+
+        function updateYesSequence() {
+            if (yesClickCount < yesResponses.length) {
+                const response = yesResponses[yesClickCount];
+                document.getElementById('yes-title').innerHTML = response.text;
+                document.getElementById('yes-image').src = response.img;
+                yesClickCount++;
+                setTimeout(updateYesSequence, 3000); 
+            }
+        }
+
+    </script>
+
+</body>
+</html>
+
+
